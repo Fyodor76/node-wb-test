@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 8080;
 require('dotenv').config();
 
 const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : process.env.DEVELOPMENT_URL;
@@ -10,5 +10,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`App listening on port at ${url}`);
+  console.log(`App listening on port at ${url} at port ${port}`);
 });
