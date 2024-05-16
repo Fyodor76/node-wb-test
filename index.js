@@ -6,6 +6,9 @@ require('dotenv').config();
 const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : process.env.DEVELOPMENT_URL;
 
 app.get('/', (req, res) => {
+  for (let i = 0; i < 10000; i++) {
+    console.log('test', i)
+  }
   res.send('Hello World!');
 });
 
