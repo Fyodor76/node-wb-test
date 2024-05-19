@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from "cors"
 import {Todo} from "./models/todo.js"
 import { sequelize } from './database.js';
 import dotenv from "dotenv"
