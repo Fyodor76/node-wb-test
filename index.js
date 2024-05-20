@@ -58,27 +58,35 @@ app.get("/todos", async (req, res) => {
   }
 })
 
-app.post("/webhook-restart-app", (req, res) => {
-  console.log("Текущая рабочая директория:", process.cwd());
-
-  const payload = JSON.stringify(req.body);
-  const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
-  const digest = 'sha1=' + hmac.update(payload).digest('hex');
-
-  if (digest === req.headers['x-hub-signature']) {
-    exec("GIT_MERGE_AUTOEDIT=no git pull && npm install && pm2 restart my-app", (error, stdout, stderr) => {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        console.error(`stderr: ${stderr}`);
-        return res.status(500).json({error: `Internal Server Error: ${stderr}`});
-      }
-      console.log(`stdout: ${stdout}`);
-      res.status(200).send('Webhook received and processed successfully');
-    });
-  } else {
-    res.status(401).send('Unauthorized');
+app.post("/webhook-restart-app", async (req, res) => {
+  try {
+    const payload = JSON.stringify(req.body);
+    const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
+    const digest = 'sha1=' + hmac.update(payload).digest('hex');
+    
+    if (digest !== req.headers['x-hub-signature']) {
+      return res.status(401).send('Unauthorized');
+    }
+    
+    const command = "git pull --no-edit && npm install && pm2 restart my-app";
+    const { stdout, stderr } = await execPromise(command);
+    if (stderr) throw new Error(stderr);
+    console.log(stdout);
+    res.status(200).send('Webhook received and processed successfully');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+function execPromise(command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) reject(error);
+      resolve({ stdout, stderr });
+    });
+  });
+}
 
 
 app.listen(port, () => {
