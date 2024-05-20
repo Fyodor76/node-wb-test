@@ -71,7 +71,7 @@ app.post("/webhook-restart-app", (req, res) => {
     exec('git pull && npm install && pm2 restart my-app', (error, stdout, stderr) => {
       console.log("test three")
       if (error) {
-        console.log(error, 'error')
+        console.log('error')
         console.error(`exec error: ${error}`);
         return res.status(500).send('Internal Server Error');
       }
