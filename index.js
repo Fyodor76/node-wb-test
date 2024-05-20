@@ -73,7 +73,7 @@ app.post("/webhook-restart-app", (req, res) => {
       if (error) {
         console.log('error')
         console.error(`exec error: ${error}`);
-        return res.status(500).send('Internal Server Error');
+        return res.status(500).json({error: 'Internal Server Error'});
       }
       console.log("test four")
       console.log(`stdout: ${stdout}`);
