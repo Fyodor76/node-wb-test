@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from "cors"
 import crypto from 'crypto';
-import { exec } from 'child_process';
 import {Todo} from "./models/todo.js"
 import { sequelize } from './database.js';
 import dotenv from "dotenv"
+import { execPromise } from './helpers/execPromise.js';
 
 dotenv.config()
 const app = express();
@@ -27,7 +27,7 @@ sequelize.sync({ force: false })
 app.get('/', async (req, res) => {
   try {
     await sequelize.authenticate();
-    res.send('Hello World! Database connection is successful. Check!!!');
+    res.send('Hello World! Database connection is successful.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     res.send('Failed to connect to the database.');
@@ -78,21 +78,6 @@ app.post("/webhook-restart-app", async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-function execPromise(command) {
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error('Execution Error:', error);
-        resolve({ error, stdout, stderr });  // Возвращаем результат вместо отклонения промиса
-      } else {
-        resolve({ stdout, stderr });
-      }
-    });
-  });
-}
-
-
 
 app.listen(port, () => {
   console.log(`App listening on port at ${url} at port ${port}`);
