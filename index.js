@@ -61,7 +61,6 @@ app.get("/todos", async (req, res) => {
 app.post("/webhook-restart-app", (req, res) => {
   console.log("I am here")
   const payload = JSON.stringify(req.body);
-  console.log(payload, 'payload')
   const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
   const digest = 'sha1=' + hmac.update(payload).digest('hex');
 
