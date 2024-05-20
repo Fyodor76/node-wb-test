@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from "cors"
+import crypto from 'crypto';
+import { exec } from 'child_process';
 import {Todo} from "./models/todo.js"
 import { sequelize } from './database.js';
 import dotenv from "dotenv"
@@ -55,6 +57,27 @@ app.get("/todos", async (req, res) => {
     res.status(500).json({ error: "Произошла ошибка"})
   }
 })
+
+app.post("/webhook-restart-app", (req, res) => {
+  const payload = JSON.stringify(req.body);
+  const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
+  const digest = 'sha1=' + hmac.update(payload).digest('hex');
+
+  if (digest === req.headers['x-hub-signature']) {
+    // Команда для обновления репозитория и перезапуска приложения
+    exec('git pull && npm install && pm2 restart all', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return res.status(500).send('Internal Server Error');
+      }
+      console.log(`stdout: ${stdout}`);
+      console.error(`stderr: ${stderr}`);
+      res.status(200).send('Webhook received and processed successfully');
+    });
+  } else {
+    res.status(401).send('Unauthorized');
+  }
+});
 
 app.listen(port, () => {
   console.log(`App listening on port at ${url} at port ${port}`);
