@@ -66,7 +66,7 @@ app.post("/webhook-restart-app", (req, res) => {
   const digest = 'sha1=' + hmac.update(payload).digest('hex');
 
   if (digest === req.headers['x-hub-signature']) {
-    exec("git pull", (error, stdout, stderr) => {
+    exec("pm2 restart my-app", (error, stdout, stderr) => {
       if (error) {
         console.error(`exec error: ${error}`);
         console.error(`stderr: ${stderr}`);
