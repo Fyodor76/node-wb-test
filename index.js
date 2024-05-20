@@ -64,18 +64,23 @@ app.post("/webhook-restart-app", (req, res) => {
   const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
   const digest = 'sha1=' + hmac.update(payload).digest('hex');
 
+  console.log('test one')
   if (digest === req.headers['x-hub-signature']) {
+  console.log('test two')
     // Команда для обновления репозитория и перезапуска приложения
     exec('git pull && npm install && pm2 restart my-app', (error, stdout, stderr) => {
+      console.log("test three")
       if (error) {
         console.error(`exec error: ${error}`);
         return res.status(500).send('Internal Server Error');
       }
+      console.log("test four")
       console.log(`stdout: ${stdout}`);
       console.error(`stderr: ${stderr}`);
       res.status(200).send('Webhook received and processed successfully');
     });
   } else {
+    console.log("test five")
     res.status(401).send('Unauthorized');
   }
 });
