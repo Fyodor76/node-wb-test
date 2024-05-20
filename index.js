@@ -82,11 +82,16 @@ app.post("/webhook-restart-app", async (req, res) => {
 function execPromise(command) {
   return new Promise((resolve, reject) => {
     exec(command, (error, stdout, stderr) => {
-      if (error) reject(error);
-      resolve({ stdout, stderr });
+      if (error) {
+        console.error('Execution Error:', error);
+        resolve({ error, stdout, stderr });  // Возвращаем результат вместо отклонения промиса
+      } else {
+        resolve({ stdout, stderr });
+      }
     });
   });
 }
+
 
 
 app.listen(port, () => {
