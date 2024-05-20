@@ -27,7 +27,7 @@ sequelize.sync({ force: false })
 app.get('/', async (req, res) => {
   try {
     await sequelize.authenticate();
-    res.send('Hello World! Database connection is successful.');
+    res.send('Hello World! Database connection is successful. Check!');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     res.send('Failed to connect to the database.');
@@ -57,6 +57,23 @@ app.get("/todos", async (req, res) => {
     res.status(500).json({ error: "Произошла ошибка"})
   }
 })
+
+app.delete("/todos/:id", async (req, res) => {
+  try {
+    const id = req.params.id;  
+    const todo = await Todo.findByPk(id); 
+
+    if (!todo) {
+      return res.status(404).json({ error: "Todo not found" });  // Возвращаем ошибку, если задача не найдена
+    }
+
+    await todo.destroy();  // Удаление найденной задачи
+    res.status(200).json({ message: "Todo deleted successfully", id: id });  // Отправляем подтверждение об успешном удалении
+  } catch (error) {
+    console.error('Error deleting todo:', error);
+    res.status(500).json({ error: "Failed to delete todo" });  // Возвращаем ошибку сервера, если удаление не удалось
+  }
+});
 
 app.post("/webhook-restart-app", async (req, res) => {
   try {
