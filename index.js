@@ -27,7 +27,7 @@ sequelize.sync({ force: false })
 app.get('/', async (req, res) => {
   try {
     await sequelize.authenticate();
-    res.send('Hello World! Database connection is successful. Test for DB!!!!!!!!!');
+    res.send('Hello World! Database connection is successful.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     res.send('Failed to connect to the database.');
@@ -67,9 +67,8 @@ app.post("/webhook-restart-app", (req, res) => {
   console.log('test one')
   if (digest === req.headers['x-hub-signature']) {
   console.log('test two')
-    // Команда для обновления репозитория и перезапуска приложения
+
     exec('git pull && npm install && pm2 restart my-app', (error, stdout, stderr) => {
-      console.log("test three")
       if (error) {
         console.log('error')
         console.error(`exec error: ${error}`);
