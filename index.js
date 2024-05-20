@@ -27,7 +27,7 @@ sequelize.sync({ force: false })
 app.get('/', async (req, res) => {
   try {
     await sequelize.authenticate();
-    res.send('Hello World! Database connection is successful.');
+    res.send('Hello World! Database connection is successful. It is test for DB.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     res.send('Failed to connect to the database.');
