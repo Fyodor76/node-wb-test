@@ -27,7 +27,7 @@ sequelize.sync({ force: false })
 app.get('/', async (req, res) => {
   try {
     await sequelize.authenticate();
-    res.send('Hello World! Database connection is successful.');
+    res.send('Hello World! Database connection is successful. DB DB DB!!!');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     res.send('Failed to connect to the database.');
@@ -58,32 +58,32 @@ app.get("/todos", async (req, res) => {
   }
 })
 
+const exec = require('child_process').exec;
+const repoPath = '/путь/к/вашему/репозиторию'; // Укажите путь к репозиторию
+
 app.post("/webhook-restart-app", (req, res) => {
-  console.log("I am here")
+  console.log("Текущая рабочая директория:", process.cwd());
+
   const payload = JSON.stringify(req.body);
   const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
   const digest = 'sha1=' + hmac.update(payload).digest('hex');
 
-  console.log('test one')
   if (digest === req.headers['x-hub-signature']) {
-  console.log('test two')
-
-    exec('git pull && npm install && pm2 restart my-app', (error, stdout, stderr) => {
+    const repoPath = process.cwd(); // Или замените на ваш фактический путь
+    exec("&& git pull && npm install && pm2 restart my-app", (error, stdout, stderr) => {
       if (error) {
         console.error(`exec error: ${error}`);
         console.error(`stderr: ${stderr}`);
         return res.status(500).json({error: `Internal Server Error: ${stderr}`});
       }
-      console.log("test four")
       console.log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
       res.status(200).send('Webhook received and processed successfully');
     });
   } else {
-    console.log("test five")
     res.status(401).send('Unauthorized');
   }
 });
+
 
 app.listen(port, () => {
   console.log(`App listening on port at ${url} at port ${port}`);
