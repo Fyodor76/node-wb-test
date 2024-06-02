@@ -36,15 +36,15 @@ app.listen(port, () => {
 });
 
 
-// app.get('/', async (req, res) => {
-//   try {
-//     await sequelize.authenticate();
-//     res.send('Hello World! Database connection is successful. Check!');
-//   } catch (error) {
-//     console.error('Unable to connect to the database:', error);
-//     res.send('Failed to connect to the database.');
-//   }
-// });
+app.get('/', async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    res.send('Hello World! Database connection is successful. Check!');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+    res.send('Failed to connect to the database.');
+  }
+});
 
 // app.post('/todos', async (req, res) => {
 //   try {
