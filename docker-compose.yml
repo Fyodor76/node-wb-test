@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DEVELOPMENT_URL: http://localhost
+      PRODUCTION_URL: http://31.129.63.84
+      DB_NAME: express-node-back
+      DB_USER: postgres
+      DB_PASSWORD: 764297Fedia!
+      DB_HOST: db
+      DB_PORT: 5432
+      SECRET_TOKEN: webhook-restart
+    command: sh -c "if [ '$$NODE_ENV' = 'production' ]; then npm run start:prod; else npm run start:dev; fi"
+    depends_on:
+      - db
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: express-node-back
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 764297Fedia!
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  postgres_data:
