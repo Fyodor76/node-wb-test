@@ -1,47 +1,26 @@
-import multer from 'multer';
-import fs from 'fs';
+import upload from '../middlewares/upload.js';
 import { UserService } from '../services/usersService.js';
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = 'uploads/';
-    
-    // Проверяем, существует ли папка
-    if (!fs.existsSync(uploadPath)) {
-      // Создаем папку, если она не существует
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  }
-});
-
-const upload = multer({ storage });
-
 export const UsersController = {
-  register: [
-    upload.single('profilePicture'),
-    async (req, res) => {
-      try {
-        const { username, password, email } = req.body;
-        const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
-        console.log(profilePictureUrl, 'praarssa');
-        const newUser = await UserService.register({ username, password, email, profilePicture: profilePictureUrl });
-        res.cookie('user', JSON.stringify({ id: newUser.id, username: newUser.username }), { httpOnly: true });
-        res.status(201).json({ message: 'User registered successfully' });
-      } catch (error) {
-        console.error('Error registering user:', error.message);
-        if (error.message === 'Username already exists' || error.message === 'Email already exists') {
-          res.status(400).json({ message: error.message });
-        } else {
-          res.status(500).json({ message: 'Internal server error' });
+    register: [
+        upload.single('profilePicture'),
+        async (req, res) => {
+          try {
+            const { username, password, email } = req.body;
+            const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
+            const newUser = await UserService.register({ username, password, email, profilePicture: profilePictureUrl });
+            res.cookie('user', JSON.stringify({ id: newUser.id, username: newUser.username }), { httpOnly: true });
+            res.status(201).json({ message: 'User registered successfully' });
+          } catch (error) {
+            console.error('Error registering user:', error.message);
+            if (error.message === 'Username already exists' || error.message === 'Email already exists') {
+              res.status(400).json({ message: error.message });
+            } else {
+              res.status(500).json({ message: 'Internal server error' });
+            }
+          }
         }
-      }
-    }
-  ],
+      ],
 
   login: async (req, res) => {
     try {

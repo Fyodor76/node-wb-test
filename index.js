@@ -1,13 +1,21 @@
 // app.js
-
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { sequelize } from './database.js';
+import "./models/cartItems.js"
+import "./models/categories.js"
+import "./models/orderItem.js"
+import "./models/orders.js"
+import "./models/products.js"
+import "./models/user.js"
 import routerUsers from './routes/usersRouters.js';
-import './models/user.js'; // Убедитесь, что модели импортированы
-import './models/todo.js'; // Убедитесь, что модели импортированы
+import routerCart from './routes/cartItemsRouters.js';
+import routerOrder from './routes/orderRouters.js';
+import routerCategory from './routes/categoriesRouters.js';
+import routerProduct from './routes/productsRouters.js';
+
 
 dotenv.config();
 const app = express();
@@ -22,6 +30,10 @@ const port = 8080;
 const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : process.env.DEVELOPMENT_URL;
 
 app.use('/api/user', routerUsers);
+app.use('/api/cart', routerCart);
+app.use('/api/order', routerOrder);
+app.use('/api/category', routerCategory);
+app.use('/api/product', routerProduct);
 
 sequelize.sync({ force: false }) 
   .then(() => {
