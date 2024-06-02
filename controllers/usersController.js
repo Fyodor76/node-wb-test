@@ -1,9 +1,18 @@
 import multer from 'multer';
+import fs from 'fs';
 import { UserService } from '../services/usersService.js';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    const uploadPath = 'uploads/';
+    
+    // Проверяем, существует ли папка
+    if (!fs.existsSync(uploadPath)) {
+      // Создаем папку, если она не существует
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}_${file.originalname}`);
@@ -19,7 +28,7 @@ export const UsersController = {
       try {
         const { username, password, email } = req.body;
         const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
-        console.log(profilePictureUrl, 'praarssa')
+        console.log(profilePictureUrl, 'praarssa');
         const newUser = await UserService.register({ username, password, email, profilePicture: profilePictureUrl });
         res.cookie('user', JSON.stringify({ id: newUser.id, username: newUser.username }), { httpOnly: true });
         res.status(201).json({ message: 'User registered successfully' });
