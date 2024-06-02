@@ -33,6 +33,11 @@ User.init({
     allowNull: false,
     unique: true,
   },
+  profilePicture: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
+  }
 }, {
   sequelize,
   modelName: 'User',

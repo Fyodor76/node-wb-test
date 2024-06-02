@@ -1,17 +1,22 @@
+// app.js
+
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { sequelize } from './database.js';
-import { routerUsers } from './routes/usersRouters.js';
-import './models/user.js';  // Убедитесь, что модели импортированы
-import './models/todo.js';  // Убедитесь, что модели импортированы
+import routerUsers from './routes/usersRouters.js';
+import './models/user.js'; // Убедитесь, что модели импортированы
+import './models/todo.js'; // Убедитесь, что модели импортированы
 
 dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+// Статическая папка для загрузки файлов
+app.use('/uploads', express.static('uploads'));
 
 const port = 8080;
 const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : process.env.DEVELOPMENT_URL;
@@ -29,6 +34,7 @@ sequelize.sync({ force: false })
 app.listen(port, () => {
   console.log(`App listening on port at ${url} at port ${port}`);
 });
+
 
 // app.get('/', async (req, res) => {
 //   try {
@@ -81,23 +87,23 @@ app.listen(port, () => {
 //   }
 // });
 
-// app.post("/webhook-restart-app", async (req, res) => {
-//   try {
-//     const payload = JSON.stringify(req.body);
-//     const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
-//     const digest = 'sha1=' + hmac.update(payload).digest('hex');
+app.post("/webhook-restart-app", async (req, res) => {
+  try {
+    const payload = JSON.stringify(req.body);
+    const hmac = crypto.createHmac('sha1', process.env.SECRET_TOKEN);
+    const digest = 'sha1=' + hmac.update(payload).digest('hex');
     
-//     if (digest !== req.headers['x-hub-signature']) {
-//       return res.status(401).send('Unauthorized');
-//     }
+    if (digest !== req.headers['x-hub-signature']) {
+      return res.status(401).send('Unauthorized');
+    }
     
-//     const command = "git pull --no-edit && npm install && pm2 restart my-app";
-//     const { stdout, stderr } = await execPromise(command);
-//     if (stderr) throw new Error(stderr);
-//     console.log(stdout);
-//     res.status(200).send('Webhook received and processed successfully');
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
+    const command = "git pull --no-edit && npm install && pm2 restart my-app";
+    const { stdout, stderr } = await execPromise(command);
+    if (stderr) throw new Error(stderr);
+    console.log(stdout);
+    res.status(200).send('Webhook received and processed successfully');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});

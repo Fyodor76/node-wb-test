@@ -1,22 +1,38 @@
-import { UserService } from "../services/usersService.js";
+import multer from 'multer';
+import { UserService } from '../services/usersService.js';
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage });
 
 export const UsersController = {
-  register: async (req, res) => {
-    try {
-      const { username, password, email } = req.body;
-      const newUser = await UserService.register({ username, password, email });
-      res.cookie('user', JSON.stringify({ id: newUser.id, username: newUser.username }), { httpOnly: true });
-      res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-      console.error('Error registering user:', error.message);
-      if (error.message === 'Username already exists' || error.message === 'Email already exists') {
-        res.status(400).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: 'Internal server error' });
+  register: [
+    upload.single('profilePicture'),
+    async (req, res) => {
+      try {
+        const { username, password, email } = req.body;
+        const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
+        console.log(profilePictureUrl, 'praarssa')
+        const newUser = await UserService.register({ username, password, email, profilePicture: profilePictureUrl });
+        res.cookie('user', JSON.stringify({ id: newUser.id, username: newUser.username }), { httpOnly: true });
+        res.status(201).json({ message: 'User registered successfully' });
+      } catch (error) {
+        console.error('Error registering user:', error.message);
+        if (error.message === 'Username already exists' || error.message === 'Email already exists') {
+          res.status(400).json({ message: error.message });
+        } else {
+          res.status(500).json({ message: 'Internal server error' });
+        }
       }
     }
-  },
+  ],
 
   login: async (req, res) => {
     try {
@@ -57,5 +73,20 @@ export const UsersController = {
       console.error('Error getting users:', error.message);
       res.status(500).json({ message: 'Internal server error' });
     }
-  }
+  },
+
+  uploadProfilePicture: [
+    upload.single('profilePicture'),
+    async (req, res) => {
+      try {
+        const userId = req.body.userId; // Или получить из авторизации
+        const profilePictureUrl = `/uploads/${req.file.filename}`;
+        const user = await UserService.updateProfilePicture(userId, profilePictureUrl);
+        res.status(200).json({ message: 'Profile picture updated successfully', user });
+      } catch (error) {
+        console.error('Error uploading profile picture:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    }
+  ]
 };
