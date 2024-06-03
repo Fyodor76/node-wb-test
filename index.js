@@ -1,21 +1,20 @@
-// app.js
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { sequelize } from './database.js';
-import "./models/cartItems.js"
-import "./models/categories.js"
-import "./models/orderItem.js"
-import "./models/orders.js"
-import "./models/products.js"
-import "./models/user.js"
-import routerUsers from './routes/usersRouters.js';
-import routerCart from './routes/cartItemsRouters.js';
-import routerOrder from './routes/orderRouters.js';
-import routerCategory from './routes/categoriesRouters.js';
-import routerProduct from './routes/productsRouters.js';
-
+import './models/user.js';
+import './models/orders.js'
+import './models/orderItem.js';
+import './models/cartItems.js';
+import './models/categories.js';
+import './models/products.js';
+import './models/todo.js';
+import { routerUsers } from './routes/usersRouters.js';
+import { routerCart } from './routes/cartItemsRouters.js';
+import { routerProduct } from './routes/productsRouters.js';
+import { routerOrder } from './routes/orderRouters.js';
+import { routerCategory } from "./routes/categoriesRouters.js"
 
 dotenv.config();
 const app = express();
@@ -23,7 +22,6 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-// Статическая папка для загрузки файлов
 app.use('/uploads', express.static('uploads'));
 
 const port = 8080;
@@ -31,7 +29,7 @@ const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL :
 
 app.use('/api/user', routerUsers);
 app.use('/api/cart', routerCart);
-app.use('/api/order', routerOrder);
+app.use('/api/order', routerOrder)
 app.use('/api/category', routerCategory);
 app.use('/api/product', routerProduct);
 

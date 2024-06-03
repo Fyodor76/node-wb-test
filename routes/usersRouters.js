@@ -1,12 +1,11 @@
 import express from 'express';
-import { UsersController } from '../controllers/usersController.js';
+import {UsersController} from "../controllers/usersController.js"
+import authenticate from '../middlewares/isAuth.js';
 
-const routerUsers = express.Router();
+export const routerUsers = express.Router();
 
+routerUsers.get('/all', authenticate, UsersController.getAllUsers);
 routerUsers.post('/register', UsersController.register);
 routerUsers.post('/login', UsersController.login);
-routerUsers.post('/logout', UsersController.logout);
-routerUsers.get('/all', UsersController.getAllUsers);
-routerUsers.post('/upload-profile-picture', UsersController.uploadProfilePicture); 
-
-export default routerUsers;
+routerUsers.post('/logout', authenticate, UsersController.logout);
+routerUsers.get('/profile', authenticate, UsersController.uploadProfilePicture);

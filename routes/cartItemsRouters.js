@@ -1,11 +1,10 @@
 import express from 'express';
 import { CartController } from '../controllers/cartItemsController.js';
+import authenticate from '../middlewares/isAuth.js';
 
-const routerCart = express.Router();
+export const routerCart = express.Router();
 
-routerCart.post('/add', CartController.addItem);
-routerCart.delete('/remove/:id', CartController.removeItem);
-routerCart.get('/:userId', CartController.getCart);
-routerCart.put('/update/:id', CartController.updateItem);
-
-export default routerCart;
+routerCart.post('/add', authenticate, CartController.addItem);
+routerCart.delete('/remove/:id', authenticate, CartController.removeItem);
+routerCart.get('/:userId', authenticate, CartController.getCart);
+routerCart.put('/update/:id', authenticate, CartController.updateItem);

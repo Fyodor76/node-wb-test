@@ -2,29 +2,31 @@ import upload from '../middlewares/upload.js';
 import { UserService } from '../services/usersService.js';
 
 export const UsersController = {
-    register: [
-        upload.single('profilePicture'),
-        async (req, res) => {
-          try {
-            const { username, password, email } = req.body;
-            const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
-            const newUser = await UserService.register({ username, password, email, profilePicture: profilePictureUrl });
-            res.cookie('user', JSON.stringify({ id: newUser.id, username: newUser.username }), { httpOnly: true });
-            res.status(201).json({ message: 'User registered successfully' });
-          } catch (error) {
-            console.error('Error registering user:', error.message);
-            if (error.message === 'Username already exists' || error.message === 'Email already exists') {
-              res.status(400).json({ message: error.message });
-            } else {
-              res.status(500).json({ message: 'Internal server error' });
-            }
-          }
+  register: [
+    upload.single('profilePicture'),
+    async (req, res) => {
+      try {
+        const { username, password, email } = req.body;
+        const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
+        const newUser = await UserService.register({ username, password, email, profilePicture: profilePictureUrl });
+        res.cookie('isAuth', 'true', { httpOnly: true });
+        res.cookie('userId', newUser.id, { httpOnly: true });
+        res.status(201).json({ message: 'User registered successfully' });
+      } catch (error) {
+        console.error('Error registering user:', error.message);
+        if (error.message === 'Username already exists' || error.message === 'Email already exists') {
+          res.status(400).json({ message: error.message });
+        } else {
+          res.status(500).json({ message: 'Internal server error' });
         }
-      ],
+      }
+    }
+  ],
 
   login: async (req, res) => {
     try {
       const { username, password } = req.body;
+      console.log(username, 'userName')
       const user = await UserService.findByUsername(username);
       if (!user) {
         return res.status(401).json({ message: 'User not found' });
@@ -33,8 +35,8 @@ export const UsersController = {
       if (!isPasswordValid) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
-      res.cookie('user', JSON.stringify({ id: user.id, username: user.username }), { httpOnly: true });
-      res.cookie('isAuthenticated', true, { httpOnly: true });
+      res.cookie('isAuth', 'true', { httpOnly: true });
+      res.cookie('userId', user.id, { httpOnly: true });
       res.status(200).json({ message: 'User logged in successfully' });
     } catch (error) {
       console.error('Error logging in user:', error.message);
@@ -44,8 +46,8 @@ export const UsersController = {
 
   logout: (req, res) => {
     try {
-      res.clearCookie('user');
-      res.clearCookie('isAuthenticated');
+      res.clearCookie('isAuth');
+      res.clearCookie('userId');
       res.status(200).json({ message: 'User logged out successfully' });
     } catch (error) {
       console.error('Error logging out user:', error.message);

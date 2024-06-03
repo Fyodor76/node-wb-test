@@ -1,12 +1,11 @@
 import express from 'express';
 import { ProductController } from '../controllers/productsController.js';
+import authenticate from '../middlewares/isAuth.js';
 
-const routerProduct = express.Router();
+export const routerProduct = express.Router();
 
-routerProduct.post('/', ProductController.createProduct);
-routerProduct.get('/', ProductController.getProducts);
-routerProduct.get('/:id', ProductController.getProductById);
-routerProduct.put('/:id', ProductController.updateProduct);
-routerProduct.delete('/:id', ProductController.deleteProduct);
-
-export default routerProduct;
+routerProduct.post('/', authenticate, ProductController.createProduct);
+routerProduct.get('/', authenticate, ProductController.getProducts);
+routerProduct.get('/:id', authenticate, ProductController.getProductById);
+routerProduct.put('/:id', authenticate, ProductController.updateProduct);
+routerProduct.delete('/:id', authenticate, ProductController.deleteProduct);

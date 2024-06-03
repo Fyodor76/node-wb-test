@@ -29,6 +29,10 @@ Product.init({
       key: 'id',
     },
   },
+  imageUrl: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 }, {
   sequelize,
   modelName: 'Product',
