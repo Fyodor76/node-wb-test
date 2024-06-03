@@ -1,4 +1,4 @@
-import upload from '../middlewares/upload.js';
+import { upload } from '../middlewares/upload.js';
 import { UserService } from '../services/usersService.js';
 
 export const UsersController = {

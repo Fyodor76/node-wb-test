@@ -21,11 +21,11 @@ Product.init({
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
-  categoryId: {
+  groupProductId: {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'Categories',
+      model: 'GroupProducts',
       key: 'id',
     },
   },

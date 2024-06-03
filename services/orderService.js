@@ -1,4 +1,5 @@
 import { CartItem } from '../models/cartItems.js';
+import { OrderItem } from '../models/orderItem.js';
 import { Order } from '../models/orders.js';
 
 export const OrderService = {

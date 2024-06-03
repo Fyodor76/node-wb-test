@@ -8,13 +8,14 @@ import './models/orders.js'
 import './models/orderItem.js';
 import './models/cartItems.js';
 import './models/categories.js';
-import './models/products.js';
+import './models/groupProduct.js';
 import './models/todo.js';
 import { routerUsers } from './routes/usersRouters.js';
 import { routerCart } from './routes/cartItemsRouters.js';
-import { routerProduct } from './routes/productsRouters.js';
 import { routerOrder } from './routes/orderRouters.js';
 import { routerCategory } from "./routes/categoriesRouters.js"
+import { routerGroupProduct } from './routes/groupProductsRouter.js';
+import { routerProduct } from './routes/productRouters.js';
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api/user', routerUsers);
 app.use('/api/cart', routerCart);
 app.use('/api/order', routerOrder)
 app.use('/api/category', routerCategory);
+app.use('/api/group-product', routerGroupProduct);
 app.use('/api/product', routerProduct);
 
 sequelize.sync({ force: false }) 

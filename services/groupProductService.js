@@ -1,9 +1,9 @@
-import { Product } from "../models/products.js";
+import { GroupProduct } from '../models/groupProduct.js';
 
-export const ProductService = {
-  createProduct: async ({ name, description, price, categoryId, imageUrl}) => {
+export const GroupProductService = {
+  createGroupProduct: async ({ name, description, price, categoryId, imageUrl }) => {
     try {
-      const product = await Product.create({ name, description, price, categoryId, imageUrl });
+      const product = await GroupProduct.create({ name, description, price, categoryId, imageUrl });
       return product;
     } catch (error) {
       console.error('Error creating product:', error.message);
@@ -11,9 +11,9 @@ export const ProductService = {
     }
   },
 
-  getProducts: async () => {
+  getGroupProducts: async () => {
     try {
-      const products = await Product.findAll();
+      const products = await GroupProduct.findAll();
       return products;
     } catch (error) {
       console.error('Error fetching products:', error.message);
@@ -21,9 +21,9 @@ export const ProductService = {
     }
   },
 
-  getProductById: async (id) => {
+  getGroupProductById: async (id) => {
     try {
-      const product = await Product.findByPk(id);
+      const product = await GroupProduct.findByPk(id);
       if (!product) {
         throw new Error('Product not found');
       }
@@ -34,9 +34,9 @@ export const ProductService = {
     }
   },
 
-  updateProduct: async (id, { name, description, price, categoryId }) => {
+  updateGroupProduct: async (id, { name, description, price, categoryId, imageUrl }) => {
     try {
-      const product = await Product.findByPk(id);
+      const product = await GroupProduct.findByPk(id);
       if (!product) {
         throw new Error('Product not found');
       }
@@ -44,6 +44,7 @@ export const ProductService = {
       product.description = description !== undefined ? description : product.description;
       product.price = price !== undefined ? price : product.price;
       product.categoryId = categoryId !== undefined ? categoryId : product.categoryId;
+      product.imageUrl = imageUrl !== undefined ? imageUrl : product.imageUrl;
       await product.save();
       return product;
     } catch (error) {
@@ -52,9 +53,9 @@ export const ProductService = {
     }
   },
 
-  deleteProduct: async (id) => {
+  deleteGroupProduct: async (id) => {
     try {
-      const product = await Product.findByPk(id);
+      const product = await GroupProduct.findByPk(id);
       if (!product) {
         throw new Error('Product not found');
       }

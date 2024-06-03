@@ -1,8 +1,9 @@
+import { CartItem } from "../models/cartItems.js";
 
 export const CartService = {
-  addItem: async ({ userId, productId, quantity }) => {
+  addItem: async ({ userId, productId, quantity, price }) => {
     try {
-      const item = await CartItem.create({ userId, productId, quantity });
+      const item = await CartItem.create({ userId, productId, quantity, price });
       return item;
     } catch (error) {
       console.error('Error adding item to cart:', error.message);

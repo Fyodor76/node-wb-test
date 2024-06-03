@@ -1,5 +1,5 @@
 import express from 'express';
-import { ProductController } from '../controllers/productsController.js';
+import { ProductController } from '../controllers/productController.js';
 import authenticate from '../middlewares/isAuth.js';
 
 export const routerProduct = express.Router();
@@ -9,3 +9,4 @@ routerProduct.get('/', authenticate, ProductController.getProducts);
 routerProduct.get('/:id', authenticate, ProductController.getProductById);
 routerProduct.put('/:id', authenticate, ProductController.updateProduct);
 routerProduct.delete('/:id', authenticate, ProductController.deleteProduct);
+
