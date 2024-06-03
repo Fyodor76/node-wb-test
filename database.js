@@ -9,7 +9,7 @@ const dbConfig = {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    host: isProduction ? 'production_host_ip' : process.env.DB_HOST, // замените 'production_host_ip' на IP вашего продакшн сервера
+    host: process.env.DB_HOST, // замените 'production_host_ip' на IP вашего продакшн сервера
     port: process.env.DB_PORT,
     dialect: 'postgres',
     logging: false,
