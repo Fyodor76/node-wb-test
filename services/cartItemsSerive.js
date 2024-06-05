@@ -3,8 +3,15 @@ import { CartItem } from "../models/cartItems.js";
 export const CartService = {
   addItem: async ({ userId, productId, quantity, price }) => {
     try {
-      const item = await CartItem.create({ userId, productId, quantity, price });
-      return item;
+      const existingItem = await CartItem.findOne({ where: { userId, productId } });
+      if (existingItem) {
+        existingItem.quantity += quantity;
+        await existingItem.save();
+        return existingItem;
+      } else {
+        const item = await CartItem.create({ userId, productId, quantity, price });
+        return item;
+      }
     } catch (error) {
       console.error('Error adding item to cart:', error.message);
       throw new Error('Internal server error');
@@ -13,7 +20,11 @@ export const CartService = {
 
   removeItem: async (id) => {
     try {
-      await CartItem.destroy({ where: { id } });
+      const item = await CartItem.findByPk(id);
+      if (!item) {
+        throw new Error('Item not found');
+      }
+      await item.destroy();
     } catch (error) {
       console.error('Error removing item from cart:', error.message);
       throw new Error('Internal server error');
@@ -41,7 +52,7 @@ export const CartService = {
       return item;
     } catch (error) {
       console.error('Error updating item in cart:', error.message);
-      throw new Error(error.message);
+      throw new Error('Internal server error');
     }
   }
 };

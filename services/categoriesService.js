@@ -1,4 +1,5 @@
-import { Category } from "../models/categories.js";
+import { Category } from '../models/categories.js';
+import { UserCategory } from '../models/userCategory.js';
 
 export const CategoryService = {
   createCategory: async ({ name, description }) => {
@@ -62,5 +63,16 @@ export const CategoryService = {
       console.error('Error deleting category:', error.message);
       throw new Error('Internal server error');
     }
-  }
+  },
+
+  getUserCategories: async (userId) => {
+    try {
+      const userCategories = await UserCategory.findAll({ where: { userId }, include: Category });
+      const categories = userCategories.map(uc => uc.Category);
+      return categories;
+    } catch (error) {
+      console.error('Error fetching user categories:', error.message);
+      throw new Error('Internal server error');
+    }
+  },
 };

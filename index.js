@@ -10,16 +10,23 @@ import './models/cartItems.js';
 import './models/categories.js';
 import './models/groupProduct.js';
 import './models/todo.js';
+import './models/recommendation.js'
 import { routerUsers } from './routes/usersRouters.js';
 import { routerCart } from './routes/cartItemsRouters.js';
 import { routerOrder } from './routes/orderRouters.js';
 import { routerCategory } from "./routes/categoriesRouters.js"
 import { routerGroupProduct } from './routes/groupProductsRouter.js';
 import { routerProduct } from './routes/productRouters.js';
+import { routerRecommendation } from './routes/recommendationRouters.js';
+import './models/associations.js'
 
+const corsOptions = {
+  origin: 'http://localhost:3001',
+  credentials: true,
+};
 dotenv.config();
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -34,6 +41,7 @@ app.use('/api/order', routerOrder)
 app.use('/api/category', routerCategory);
 app.use('/api/group-product', routerGroupProduct);
 app.use('/api/product', routerProduct);
+app.use('/api/recommendation', routerRecommendation);
 
 sequelize.sync({ force: false }) 
   .then(() => {

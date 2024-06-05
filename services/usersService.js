@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 import { User } from '../models/user.js';
+import { UserCategory } from '../models/userCategory.js';
+import { UserGroupProduct } from '../models/userGroupProduct.js';
 
 export const UserService = {
   register: async ({ username, password, email, profilePicture }) => {
@@ -8,8 +10,6 @@ export const UserService = {
       if (existingUserByUsername) {
         throw new Error('Username already exists');
       }
-
-      console.log(profilePicture, 'profile picture in service')
 
       const existingUserByEmail = await User.findOne({ where: { email } });
       if (existingUserByEmail) {
@@ -31,7 +31,6 @@ export const UserService = {
       throw error;
     }
   },
-
   findByUsername: async (username) => {
     try {
       const user = await User.findOne({ where: { username } });
@@ -86,5 +85,45 @@ export const UserService = {
       console.error('Error in UserService.updateProfilePicture:', error);
       throw error;
     }
-  }
+  },
+
+  addUserCategory: async (userId, categoryId) => {
+    try {
+      const userCategory = await UserCategory.create({ userId, categoryId });
+      return userCategory;
+    } catch (error) {
+      console.error('Error in UserService.addUserCategory:', error);
+      throw error;
+    }
+  },
+
+  addUserGroupProduct: async (userId, groupProductId) => {
+    try {
+      const userGroupProduct = await UserGroupProduct.create({ userId, groupProductId });
+      return userGroupProduct;
+    } catch (error) {
+      console.error('Error in UserService.addUserGroupProduct:', error);
+      throw error;
+    }
+  },
+
+  getUserCategories: async (userId) => {
+    try {
+      const categories = await UserCategory.findAll({ where: { userId }, include: Category });
+      return categories;
+    } catch (error) {
+      console.error('Error in UserService.getUserCategories:', error);
+      throw error;
+    }
+  },
+
+  getUserGroupProducts: async (userId) => {
+    try {
+      const groupProducts = await UserGroupProduct.findAll({ where: { userId }, include: GroupProduct });
+      return groupProducts;
+    } catch (error) {
+      console.error('Error in UserService.getUserGroupProducts:', error);
+      throw error;
+    }
+  },
 };

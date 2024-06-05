@@ -1,4 +1,5 @@
-import { CategoryService } from "../services/categoriesService.js";
+// controllers/categoryController.js
+import {CategoryService} from "../services/categoriesService.js"
 
 export const CategoryController = {
   createCategory: async (req, res) => {
@@ -54,5 +55,16 @@ export const CategoryController = {
       console.error('Error deleting category:', error.message);
       res.status(500).json({ message: error.message });
     }
-  }
+  },
+
+  getUserCategories: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const categories = await CategoryService.getUserCategories(userId);
+      res.status(200).json(categories);
+    } catch (error) {
+      console.error('Error fetching user categories:', error.message);
+      res.status(500).json({ message: error.message });
+    }
+  },
 };

@@ -1,5 +1,10 @@
+// controllers/userController.js
+import { UserService } from '../services/usersService.js'
+import { UserCategory } from '../models/userCategory.js';
+import { UserGroupProduct } from '../models/userGroupProduct.js';
+import { Category } from '../models/categories.js';
+import { GroupProduct } from '../models/groupProduct.js';
 import { upload } from '../middlewares/upload.js';
-import { UserService } from '../services/usersService.js';
 
 export const UsersController = {
   register: [
@@ -78,5 +83,49 @@ export const UsersController = {
         res.status(500).json({ message: 'Internal server error' });
       }
     }
-  ]
+  ],
+
+  addUserCategory: async (req, res) => {
+    try {
+      const { userId, categoryId } = req.body;
+      const userCategory = await UserService.addUserCategory(userId, categoryId);
+      res.status(201).json(userCategory);
+    } catch (error) {
+      console.error('Error adding user category:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+  addUserGroupProduct: async (req, res) => {
+    try {
+      const { userId, groupProductId } = req.body;
+      const userGroupProduct = await UserService.addUserGroupProduct(userId, groupProductId);
+      res.status(201).json(userGroupProduct);
+    } catch (error) {
+      console.error('Error adding user group product:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+  getUserCategories: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const categories = await UserService.getUserCategories(userId);
+      res.status(200).json(categories);
+    } catch (error) {
+      console.error('Error fetching user categories:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+  getUserGroupProducts: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const groupProducts = await UserService.getUserGroupProducts(userId);
+      res.status(200).json(groupProducts);
+    } catch (error) {
+      console.error('Error fetching user group products:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
 };
