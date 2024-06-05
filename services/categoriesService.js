@@ -1,4 +1,6 @@
 import { Category } from '../models/categories.js';
+import { GroupProduct } from '../models/groupProduct.js';
+import { Product } from '../models/product.js';
 import { UserCategory } from '../models/userCategory.js';
 
 export const CategoryService = {
@@ -51,13 +53,28 @@ export const CategoryService = {
     }
   },
 
+  
   deleteCategory: async (id) => {
     try {
       const category = await Category.findByPk(id);
       if (!category) {
         throw new Error('Category not found');
       }
+
+      // Найти все группы продуктов, связанные с категорией
+      const groupProducts = await GroupProduct.findAll({ where: { categoryId: id } });
+
+      // Удалить все продукты, связанные с каждой группой продуктов
+      for (const groupProduct of groupProducts) {
+        await Product.destroy({ where: { groupProductId: groupProduct.id } });
+      }
+
+      // Удалить все группы продуктов, связанные с категорией
+      await GroupProduct.destroy({ where: { categoryId: id } });
+
+      // Удалить категорию
       await category.destroy();
+
       return category;
     } catch (error) {
       console.error('Error deleting category:', error.message);

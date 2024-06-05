@@ -1,4 +1,5 @@
 import { GroupProduct } from '../models/groupProduct.js';
+import { Product } from '../models/product.js';
 
 export const GroupProductService = {
   createGroupProduct: async ({ name, description, price, categoryId, imageUrl }) => {
@@ -55,14 +56,19 @@ export const GroupProductService = {
 
   deleteGroupProduct: async (id) => {
     try {
-      const product = await GroupProduct.findByPk(id);
-      if (!product) {
-        throw new Error('Product not found');
+      const groupProduct = await GroupProduct.findByPk(id);
+      if (!groupProduct) {
+        throw new Error('GroupProduct not found');
       }
-      await product.destroy();
-      return product;
+
+      // Удаляем связанные продукты
+      await Product.destroy({ where: { groupProductId: id } });
+
+      // Удаляем группу продуктов
+      await groupProduct.destroy();
+      return groupProduct;
     } catch (error) {
-      console.error('Error deleting product:', error.message);
+      console.error('Error deleting group product:', error.message);
       throw new Error('Internal server error');
     }
   }
