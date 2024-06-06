@@ -22,7 +22,7 @@ import './models/associations.js'
 
 const allowedOrigins = [
   'http://localhost:3001',
-  'https://fyodor76.github.io/wb-front/login'
+  'https://fyodor76.github.io/wb-front'
 ];
 
 const corsOptions = {
