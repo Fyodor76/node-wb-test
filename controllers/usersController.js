@@ -6,6 +6,7 @@ export const UsersController = {
   register: [
     upload.single('profilePicture'),
     async (req, res) => {
+      console.log(req.body, 'req.body')
       try {
         const { username, password, email } = req.body;
         const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
