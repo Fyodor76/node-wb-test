@@ -20,10 +20,23 @@ import { routerProduct } from './routes/productRouters.js';
 import { routerRecommendation } from './routes/recommendationRouters.js';
 import './models/associations.js'
 
+const allowedOrigins = [
+  'http://localhost:3001',
+  'https://fyodor76.github.io/wb-front/login'
+];
+
 const corsOptions = {
-  origin: 'http://localhost:3001',
+  origin: (origin, callback) => {
+    // Check if the origin is in the allowed origins list or if there's no origin (like for same-origin requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 };
+
 dotenv.config();
 const app = express();
 app.use(cors(corsOptions));
