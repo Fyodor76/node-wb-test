@@ -9,6 +9,7 @@ routerUsers.post('/register', UsersController.register);
 routerUsers.post('/login', UsersController.login);
 routerUsers.post('/logout', authenticate, UsersController.logout);
 routerUsers.post('/profile', authenticate, UsersController.uploadProfilePicture);
+routerUsers.get('/profile', authenticate, UsersController.getUserProfile);
 
 // Маршруты для работы с рекомендациями
 routerUsers.post('/addCategory', authenticate, UsersController.addUserCategory);

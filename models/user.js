@@ -24,6 +24,21 @@ User.init({
     allowNull: false,
     unique: true,
   },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: false,
+  },
+  secondName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: false,
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: false,
+  },
   password: {
     type: DataTypes.STRING,
     allowNull: false,

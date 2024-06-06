@@ -17,10 +17,6 @@ GroupProduct.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
-  price: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-  },
   categoryId: {
     type: DataTypes.UUID,
     allowNull: false,

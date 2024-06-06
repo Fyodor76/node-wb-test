@@ -31,6 +31,17 @@ export const UserService = {
       throw error;
     }
   },
+
+  findById: async (id) => {
+    try {
+      const user = await User.findByPk(id);
+      return user;
+    } catch (error) {
+      console.error('Error in UserService.findById:', error);
+      throw error;
+    }
+  },
+  
   findByUsername: async (username) => {
     try {
       const user = await User.findOne({ where: { username } });

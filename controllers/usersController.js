@@ -42,7 +42,10 @@ export const UsersController = {
       }
       res.cookie('isAuth', 'true', { httpOnly: true });
       res.cookie('userId', user.id, { httpOnly: true });
-      res.status(200).json({ message: 'User logged in successfully' });
+      const userWithoutPassword = { ...user.toJSON() };
+      delete userWithoutPassword.password;
+
+      res.status(200).json({ message: 'User logged in successfully', user: userWithoutPassword });
     } catch (error) {
       console.error('Error logging in user:', error.message);
       res.status(500).json({ message: 'Internal server error' });
@@ -59,7 +62,28 @@ export const UsersController = {
       res.status(500).json({ message: 'Internal server error' });
     }
   },
+  getUserProfile: async (req, res) => {
+    try {
+      const { userId } = req.cookies;
+      if (!userId) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
 
+      const user = await UserService.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const userWithoutPassword = { ...user.toJSON() };
+      delete userWithoutPassword.password;
+
+      res.status(200).json({ user: userWithoutPassword });
+    } catch (error) {
+      console.error('Error fetching user profile:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+  
   getAllUsers: async (req, res) => {
     try {
       const users = await UserService.getAllUsers();
