@@ -8,8 +8,9 @@ routerUsers.get('/all', authenticate, UsersController.getAllUsers);
 routerUsers.post('/register', UsersController.register);
 routerUsers.post('/login', UsersController.login);
 routerUsers.post('/logout', authenticate, UsersController.logout);
-routerUsers.post('/profile', authenticate, UsersController.uploadProfilePicture);
+routerUsers.post('/update-picture', authenticate, UsersController.uploadProfilePicture);
 routerUsers.get('/profile', authenticate, UsersController.getUserProfile);
+routerUsers.put('/profile', authenticate, UsersController.updateProfile);
 
 // Маршруты для работы с рекомендациями
 routerUsers.post('/addCategory', authenticate, UsersController.addUserCategory);

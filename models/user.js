@@ -29,7 +29,7 @@ User.init({
     allowNull: true,
     unique: false,
   },
-  secondName: {
+  lastName: {
     type: DataTypes.STRING,
     allowNull: true,
     unique: false,

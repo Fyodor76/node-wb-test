@@ -22,7 +22,7 @@ export const UserService = {
         username,
         password: hashedPassword,
         email,
-        profilePicture
+        profilePicture,
       });
 
       return newUser;
@@ -41,9 +41,10 @@ export const UserService = {
       throw error;
     }
   },
-  
+
   findByUsername: async (username) => {
     try {
+      console.log("user")
       const user = await User.findOne({ where: { username } });
       return user;
     } catch (error) {
@@ -134,6 +135,22 @@ export const UserService = {
       return groupProducts;
     } catch (error) {
       console.error('Error in UserService.getUserGroupProducts:', error);
+      throw error;
+    }
+  },
+
+  updateProfile: async (userId, updatedData) => {
+    try {
+      const user = await User.findByPk(userId);
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      Object.assign(user, updatedData);
+      await user.save();
+      return user;
+    } catch (error) {
+      console.error('Error updating profile:', error);
       throw error;
     }
   },

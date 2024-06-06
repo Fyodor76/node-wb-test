@@ -1,9 +1,5 @@
 // controllers/userController.js
 import { UserService } from '../services/usersService.js'
-import { UserCategory } from '../models/userCategory.js';
-import { UserGroupProduct } from '../models/userGroupProduct.js';
-import { Category } from '../models/categories.js';
-import { GroupProduct } from '../models/groupProduct.js';
 import { upload } from '../middlewares/upload.js';
 
 export const UsersController = {
@@ -31,6 +27,7 @@ export const UsersController = {
   login: async (req, res) => {
     try {
       const { username, password } = req.body;
+      console.log(req.body, 'req.boy!!!!')
       console.log(username, 'userName')
       const user = await UserService.findByUsername(username);
       if (!user) {
@@ -62,6 +59,7 @@ export const UsersController = {
       res.status(500).json({ message: 'Internal server error' });
     }
   },
+
   getUserProfile: async (req, res) => {
     try {
       const { userId } = req.cookies;
@@ -83,7 +81,7 @@ export const UsersController = {
       res.status(500).json({ message: 'Internal server error' });
     }
   },
-  
+
   getAllUsers: async (req, res) => {
     try {
       const users = await UserService.getAllUsers();
@@ -152,4 +150,35 @@ export const UsersController = {
       res.status(500).json({ message: 'Internal server error' });
     }
   },
+
+  updateProfile: [
+    upload.single('profilePicture'),
+    async (req, res) => {
+      try {
+        const { userId } = req.cookies;
+        const { firstName, lastName, address, username, email } = req.body;
+        console.log(req.body, 'req.body!!!')
+        const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
+
+        const updatedData = {
+          firstName,
+          lastName,
+          address,
+          username,
+          email,
+          profilePicture: profilePictureUrl,
+        };
+
+        Object.keys(updatedData).forEach(
+          key => updatedData[key] === undefined && delete updatedData[key]
+        );
+
+        const updatedUser = await UserService.updateProfile(userId, updatedData);
+        res.status(200).json({ message: 'Profile updated successfully', user: updatedUser });
+      } catch (error) {
+        console.error('Error updating profile:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    }
+  ],
 };
