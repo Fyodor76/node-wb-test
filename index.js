@@ -20,20 +20,12 @@ import { routerProduct } from './routes/productRouters.js';
 import { routerRecommendation } from './routes/recommendationRouters.js';
 import './models/associations.js'
 
-const allowedOrigins = [
-  'http://localhost:3001',
-  'https://fyodor76.github.io/wb-front'
-];
-
 const corsOptions = {
-  origin: (origin, callback) => {
-    // Check if the origin is in the allowed origins list or if there's no origin (like for same-origin requests)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: [
+    'http://localhost:3001', // Development URL
+    'http://127.0.0.1:3001', // Another possible localhost URL
+    'http://31.129.63.84' // Production URL
+  ],
   credentials: true,
 };
 
