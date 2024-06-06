@@ -24,7 +24,9 @@ const corsOptions = {
   origin: [
     'http://localhost:3001', // Development URL
     'http://127.0.0.1:3001', // Another possible localhost URL
-    'http://31.129.63.84' // Production URL
+    'http://31.129.63.84', // Production URL
+    'https://fyodor76.github.io/wb-front',
+    'https://fyodor76.github.io/'
   ],
   credentials: true,
 };
