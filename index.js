@@ -26,8 +26,10 @@ const corsOptions = {
     'http://127.0.0.1:3001', // Another possible localhost URL
     'http://31.129.63.84', // Production URL
     'https://fyodor76.github.io/wb-front',
-    'https://fyodor76.github.io/'
+    'https://fyodor76.github.io',
   ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 
