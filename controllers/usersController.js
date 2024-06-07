@@ -11,8 +11,8 @@ export const UsersController = {
         const { username, password, email } = req.body;
         const profilePictureUrl = req.file ? `/uploads/${req.file.filename}` : null;
         const newUser = await UserService.register({ username, password, email, profilePicture: profilePictureUrl });
-        res.cookie('isAuth', 'true', { httpOnly: true });
-        res.cookie('userId', newUser.id, { httpOnly: true });
+        res.cookie('isAuth', 'true', { httpOnly: false, secure: true, sameSite: 'None' });
+        res.cookie('userId', newUser.id, { httpOnly: false, secure: true, sameSite: 'None' });
         res.status(201).json({ message: 'User registered successfully' });
       } catch (error) {
         console.error('Error registering user:', error.message);
@@ -38,8 +38,8 @@ export const UsersController = {
       if (!isPasswordValid) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
-      res.cookie('isAuth', 'true', { httpOnly: true });
-      res.cookie('userId', user.id, { httpOnly: true });
+      res.cookie('isAuth', 'true', { httpOnly: false, secure: true, sameSite: 'None' });
+      res.cookie('userId', newUser.id, { httpOnly: false, secure: true, sameSite: 'None' });
       const userWithoutPassword = { ...user.toJSON() };
       delete userWithoutPassword.password;
 
