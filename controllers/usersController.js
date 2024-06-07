@@ -39,7 +39,7 @@ export const UsersController = {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
       res.cookie('isAuth', 'true', { httpOnly: false, secure: true, sameSite: 'None' });
-      res.cookie('userId', newUser.id, { httpOnly: false, secure: true, sameSite: 'None' });
+      res.cookie('userId', user.id, { httpOnly: false, secure: true, sameSite: 'None' });
       const userWithoutPassword = { ...user.toJSON() };
       delete userWithoutPassword.password;
 
