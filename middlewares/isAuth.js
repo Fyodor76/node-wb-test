@@ -1,5 +1,7 @@
 const authenticate = (req, res, next) => {
     const { isAuth, userId } = req.cookies;
+
+    console.log(req.cookies)
   
     if (isAuth !== 'true' || !userId) {
       return res.status(401).json({ message: 'Unauthorized' });
