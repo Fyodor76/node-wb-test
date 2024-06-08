@@ -5,7 +5,7 @@ import authenticate from '../middlewares/isAuth.js';
 export const routerProduct = express.Router();
 
 routerProduct.post('/', authenticate, ProductController.createProduct);
-routerProduct.get('/', authenticate, ProductController.getProducts);
+routerProduct.get('/', ProductController.getProducts);
 routerProduct.get('/:id', authenticate, ProductController.getProductById);
 routerProduct.put('/:id', authenticate, ProductController.updateProduct);
 routerProduct.delete('/:id', authenticate, ProductController.deleteProduct);
