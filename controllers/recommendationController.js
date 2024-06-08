@@ -4,7 +4,8 @@ import { RecommendationService } from '../services/recommendationService.js';
 export const RecommendationController = {
   addRecommendation: async (req, res) => {
     try {
-      const { userId, categoryId, groupProductId } = req.body;
+      const userId = req.userId; 
+      const { categoryId, groupProductId } = req.body;
       const recommendation = await RecommendationService.addRecommendation({ userId, categoryId, groupProductId });
       res.status(201).json(recommendation);
     } catch (error) {
@@ -15,7 +16,7 @@ export const RecommendationController = {
 
   getRecommendations: async (req, res) => {
     try {
-      const { userId } = req.params;
+      const userId = req.userId;
       const recommendations = await RecommendationService.getRecommendations(userId);
       res.status(200).json(recommendations);
     } catch (error) {

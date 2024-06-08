@@ -1,4 +1,6 @@
 // services/recommendationService.js
+import { Category } from '../models/categories.js';
+import { GroupProduct } from '../models/groupProduct.js';
 import { Recommendation } from '../models/recommendation.js';
 
 export const RecommendationService = {
@@ -21,7 +23,26 @@ export const RecommendationService = {
           { model: GroupProduct, attributes: ['id', 'name'] }
         ]
       });
-      return recommendations;
+  
+      const formattedRecommendations = recommendations.reduce((acc, recommendation) => {
+        const categoryId = recommendation.Category.id;
+        const groupProductId = recommendation.GroupProduct.id;
+  
+        const existingCategory = acc.find(item => item.categoryId === categoryId);
+  
+        if (existingCategory) {
+          existingCategory.groupIds.push(groupProductId);
+        } else {
+          acc.push({
+            categoryId,
+            groupIds: [groupProductId]
+          });
+        }
+  
+        return acc;
+      }, []);
+  
+      return formattedRecommendations;
     } catch (error) {
       console.error('Error fetching recommendations:', error.message);
       throw new Error('Internal server error');
