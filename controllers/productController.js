@@ -1,4 +1,7 @@
 import { upload } from '../middlewares/upload.js';
+import { GroupProduct } from '../models/groupProduct.js';
+import { Product } from '../models/product.js';
+import { Recommendation } from '../models/recommendation.js';
 import { ProductService } from '../services/productService.js';
 
 export const ProductController = {
@@ -53,6 +56,29 @@ export const ProductController = {
       }
     }
   ],
+
+  getProductsByRecommendations: async (req, res) => {
+    try {
+      const userId = req.userId;
+      const recommendations = await Recommendation.findAll({
+        where: { userId },
+        include: [
+          {
+            model: GroupProduct,
+            include: [Product]
+          }
+        ]
+      });
+
+      const products = recommendations
+        .flatMap(recommendation => recommendation.GroupProduct.Products);
+
+      res.status(200).json(products);
+    } catch (error) {
+      console.error('Error fetching products by recommendations:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
 
   deleteProduct: async (req, res) => {
     try {

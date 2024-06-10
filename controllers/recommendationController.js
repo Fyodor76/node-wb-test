@@ -25,6 +25,18 @@ export const RecommendationController = {
     }
   },
 
+  saveRecommendations: async (req, res) => {
+    try {
+      const userId = req.userId;
+      const recommendations = req.body;
+      await RecommendationService.saveRecommendations(userId, recommendations);
+      res.status(200).json({ message: 'Recommendations saved successfully' });
+    } catch (error) {
+      console.error('Error saving recommendations:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
   removeRecommendation: async (req, res) => {
     try {
       const { id } = req.params;
@@ -34,5 +46,5 @@ export const RecommendationController = {
       console.error('Error removing recommendation:', error.message);
       res.status(500).json({ message: 'Internal server error' });
     }
-  }
+  },
 };

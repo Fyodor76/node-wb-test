@@ -4,6 +4,6 @@ import authenticate from '../middlewares/isAuth.js';
 
 export const routerRecommendation = express.Router();
 
-routerRecommendation.post('/', authenticate, RecommendationController.addRecommendation);
+routerRecommendation.post('/', authenticate, RecommendationController.saveRecommendations);
 routerRecommendation.get('/', authenticate, RecommendationController.getRecommendations);
 routerRecommendation.delete('/:id', authenticate, RecommendationController.removeRecommendation);
