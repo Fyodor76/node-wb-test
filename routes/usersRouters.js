@@ -83,7 +83,7 @@ routerUsers.post('/login', UsersController.login);
 
 /**
  * @swagger
- * /users/logout:
+ * /api/user/logout:
  *   post:
  *     summary: Выход из приложения
  *     security:
