@@ -54,7 +54,7 @@ routerUsers.post('/register', UsersController.register);
 
 /**
  * @swagger
- * /aoi/user/login:
+ * /api/user/login:
  *   post:
  *     summary: Авторизация пользователя
  *     tags: [Users]
