@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import { User } from '../models/user.js';
 import { UserCategory } from '../models/userCategory.js';
 import { UserGroupProduct } from '../models/userGroupProduct.js';
+import { Category } from '../models/categories.js';
+import { GroupProduct } from '../models/groupProduct.js';
 
 export const UserService = {
   register: async ({ username, password, email, profilePicture }) => {
