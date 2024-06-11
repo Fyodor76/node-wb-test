@@ -18,6 +18,7 @@ import { routerCategory } from "./routes/categoriesRouters.js"
 import { routerGroupProduct } from './routes/groupProductsRouter.js';
 import { routerProduct } from './routes/productRouters.js';
 import { routerRecommendation } from './routes/recommendationRouters.js';
+import { swaggerUi, swaggerDocs } from './swagger.js';
 import './models/associations.js'
 
 const corsOptions = {
@@ -40,6 +41,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/uploads', express.static('uploads'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const port = 8080;
 const url = process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL : process.env.DEVELOPMENT_URL;
