@@ -3,38 +3,38 @@ import { sequelize } from '../database.js';
 
 export class Recommendation extends Model {}
 
-Recommendation.init({
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  userId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'id',
+  Recommendation.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-  },
-  categoryId: {
-    type: DataTypes.UUID,
-    allowNull: true,
-    references: {
-      model: 'Categories',
-      key: 'id',
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
-  },
-  groupProductId: {
-    type: DataTypes.UUID,
-    allowNull: true,
-    references: {
-      model: 'GroupProducts',
-      key: 'id',
+    categoryId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Categories',
+        key: 'id',
+      },
     },
-  },
-}, {
-  sequelize,
-  modelName: 'Recommendation',
-  tableName: 'Recommendations',
-});
+    groupProductId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'GroupProducts',
+        key: 'id',
+      },
+    },
+  }, {
+    sequelize,
+    modelName: 'Recommendation',
+    tableName: 'Recommendations',
+  });

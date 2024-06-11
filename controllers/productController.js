@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { upload } from '../middlewares/upload.js';
 import { GroupProduct } from '../models/groupProduct.js';
 import { Product } from '../models/product.js';
@@ -30,6 +31,35 @@ export const ProductController = {
     }
   },
 
+  searchProducts: async (req, res) => {
+    try {
+      const { query, group } = req.query;
+      const whereClause = {};
+
+      console.log(query, 'query')
+      console.log(group, 'group')
+      if (query) {
+        whereClause.name = {
+          [Op.iLike]: `%${query}%`
+        };
+      }
+
+
+      if (group) {
+        whereClause.groupProductId = group;
+      }
+
+      const products = await Product.findAll({
+        where: whereClause
+      });
+
+      res.status(200).json(products);
+    } catch (error) {
+      console.error('Error searching products:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
   getProductById: async (req, res) => {
     try {
       const { id } = req.params;
@@ -58,6 +88,7 @@ export const ProductController = {
   ],
 
   getProductsByRecommendations: async (req, res) => {
+    console.log('rsdaadsdasads')
     try {
       const userId = req.userId;
       const recommendations = await Recommendation.findAll({
@@ -69,6 +100,7 @@ export const ProductController = {
           }
         ]
       });
+      console.log(recommendations, 'recc')
 
       const products = recommendations
         .flatMap(recommendation => recommendation.GroupProduct.Products);
