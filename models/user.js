@@ -13,6 +13,44 @@ export class User extends Model {
   }
 }
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - password
+ *         - email
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         username:
+ *           type: string
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         address:
+ *           type: string
+ *         password:
+ *           type: string
+ *         email:
+ *           type: string
+ *         profilePicture:
+ *           type: string
+ *       example:
+ *         id: '123e4567-e89b-12d3-a456-426614174000'
+ *         username: 'johndoe'
+ *         firstName: 'John'
+ *         lastName: 'Doe'
+ *         address: '123 Main St'
+ *         password: 'password123'
+ *         email: 'johndoe@example.com'
+ *         profilePicture: 'http://example.com/profile.jpg'
+ */
 User.init({
   id: {
     type: DataTypes.UUID,
