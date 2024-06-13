@@ -170,102 +170,11 @@ routerUsers.get('/profile', authenticate, UsersController.getUserProfile);
  *         description: Unauthorized
  */
 routerUsers.put('/profile', authenticate, UsersController.updateProfile);
-
-// Маршруты для работы с рекомендациями
-/**
- * @swagger
- * /api/user/addCategory:
- *   post:
- *     summary: Добавление категорий в рекомендации пользователя
- *     security:
- *       - bearerAuth: []
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               categoryId:
- *                 type: string
- *     responses:
- *       200:
- *         description: Category added
- *       401:
- *         description: Unauthorized
- */
 routerUsers.post('/addCategory', authenticate, UsersController.addUserCategory);
-
-
-/**
- * @swagger
- * /api/user/addGroupProduct:
- *   post:
- *     summary: Добавление группы продуктов в рекомендации пользователя
- *     security:
- *       - bearerAuth: []
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               groupProductId:
- *                 type: string
- *     responses:
- *       200:
- *         description: Group product added
- *       401:
- *         description: Unauthorized
- */
 routerUsers.post('/addGroupProduct', authenticate, UsersController.addUserGroupProduct);
 
-/**
- * @swagger
- * /api/user/{userId}/categories:
- *   get:
- *     summary: Получение категорий, которые нравятся пользователю
- *     security:
- *       - bearerAuth: []
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: User ID
- *     responses:
- *       200:
- *         description: Successful operation
- *       401:
- *         description: Unauthorized
- */
+
 routerUsers.get('/:userId/categories', authenticate, UsersController.getUserCategories);
 
 
-/**
- * @swagger
- * /api/user/{userId}/groupProducts:
- *   get:
- *     summary: Получение групп продуктов, которые нравятся пользователю
- *     security:
- *       - bearerAuth: []
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: User ID
- *     responses:
- *       200:
- *         description: Successful operation
- *       401:
- *         description: Unauthorized
- */
 routerUsers.get('/:userId/groupProducts', authenticate, UsersController.getUserGroupProducts);
