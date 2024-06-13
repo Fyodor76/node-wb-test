@@ -3,6 +3,40 @@ import { sequelize } from '../database.js';
 
 export class Product extends Model {}
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - groupProductId
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         price:
+ *           type: number
+ *           format: decimal
+ *         groupProductId:
+ *           type: string
+ *           format: uuid
+ *         imageUrl:
+ *           type: string
+ *       example:
+ *         id: '123e4567-e89b-12d3-a456-426614174000'
+ *         name: 'iPhone 13'
+ *         description: 'Latest Apple smartphone'
+ *         price: 999.99
+ *         groupProductId: '123e4567-e89b-12d3-a456-426614174000'
+ *         imageUrl: 'http://example.com/iphone13.jpg'
+ */
 Product.init({
   id: {
     type: DataTypes.UUID,

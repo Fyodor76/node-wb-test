@@ -3,6 +3,27 @@ import { sequelize } from '../database.js';
 
 export class Category extends Model {}
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *       example:
+ *         id: '123e4567-e89b-12d3-a456-426614174000'
+ *         name: 'Electronics'
+ *         description: 'Electronic devices and gadgets'
+ */
 Category.init({
   id: {
     type: DataTypes.UUID,
