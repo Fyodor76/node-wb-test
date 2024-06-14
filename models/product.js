@@ -34,6 +34,7 @@ export class Product extends Model {}
  *         name: 'iPhone 13'
  *         description: 'Latest Apple smartphone'
  *         price: 999.99
+ *         rate: 4
  *         groupProductId: '123e4567-e89b-12d3-a456-426614174000'
  *         imageUrl: 'http://example.com/iphone13.jpg'
  */
@@ -66,6 +67,16 @@ Product.init({
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: true,
+  },
+  rate: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+    defaultValue: null,
+  },
+  commentsNumber: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
   },
 }, {
   sequelize,

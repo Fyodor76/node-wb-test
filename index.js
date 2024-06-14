@@ -20,6 +20,7 @@ import { routerProduct } from './routes/productRouters.js';
 import { routerRecommendation } from './routes/recommendationRouters.js';
 import { swaggerUi, swaggerDocs } from './swagger.js';
 import './models/associations.js'
+import { commentRouter } from './routes/commentRouters.js';
 
 const corsOptions = {
   origin: [
@@ -33,6 +34,9 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
+
+
+
 
 dotenv.config();
 const app = express();
@@ -53,6 +57,8 @@ app.use('/api/category', routerCategory);
 app.use('/api/group-product', routerGroupProduct);
 app.use('/api/product', routerProduct);
 app.use('/api/recommendation', routerRecommendation);
+app.use('/api/comments', commentRouter);
+
 
 sequelize.sync({ force: false }) 
   .then(() => {

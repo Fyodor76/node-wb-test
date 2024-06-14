@@ -2,14 +2,13 @@ import {Sequelize} from "sequelize"
 import dotenv from "dotenv"
 dotenv.config()
 
-
 // Определение настроек для разных сред
 const isProduction = process.env.NODE_ENV === 'production';
 const dbConfig = {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    host: process.env.DB_HOST, // замените 'production_host_ip' на IP вашего продакшн сервера
+    host: process.env.DB_HOST, 
     port: process.env.DB_PORT,
     dialect: 'postgres',
     logging: false,

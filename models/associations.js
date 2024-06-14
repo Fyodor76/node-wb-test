@@ -6,6 +6,7 @@ import { OrderItem } from './orderItem.js';
 import { Category } from './categories.js';
 import { Order } from './orders.js';
 import { CartItem } from './cartItems.js';
+import { Comment } from './comments.js';
 
 User.hasMany(Recommendation, { foreignKey: 'userId' });
 Recommendation.belongsTo(User, { foreignKey: 'userId' });
@@ -53,3 +54,10 @@ CartItem.belongsTo(User, { foreignKey: 'userId' });
 // Product -> CartItem
 Product.hasMany(CartItem, { foreignKey: 'productId' });
 CartItem.belongsTo(Product, { foreignKey: 'productId' });
+
+
+Product.hasMany(Comment, { foreignKey: 'productId' });
+Comment.belongsTo(Product, { foreignKey: 'productId' })
+
+Comment.belongsTo(User, { foreignKey: 'userId' })
+User.hasMany(Comment, { foreignKey: 'userId' });

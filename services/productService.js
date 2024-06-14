@@ -1,4 +1,13 @@
+import { Comment } from '../models/comments.js';
 import { Product } from '../models/product.js';
+
+const addCommentsNumber = async (product) => {
+  const commentsCount = await Comment.count({ where: { productId: product.id } });
+  return {
+    ...product.get({ plain: true }),
+    commentsNumber: commentsCount,
+  };
+};
 
 export const ProductService = {
   createProduct: async ({ name, description, price, groupProductId, imageUrl }) => {
@@ -14,7 +23,8 @@ export const ProductService = {
   getProducts: async () => {
     try {
       const products = await Product.findAll();
-      return products;
+      const productsWithComments = await Promise.all(products.map(addCommentsNumber));
+      return productsWithComments;
     } catch (error) {
       console.error('Error fetching products:', error.message);
       throw new Error('Internal server error');
@@ -27,7 +37,7 @@ export const ProductService = {
       if (!product) {
         throw new Error('Product not found');
       }
-      return product;
+      return addCommentsNumber(product);
     } catch (error) {
       console.error('Error fetching product:', error.message);
       throw new Error('Internal server error');
@@ -46,7 +56,7 @@ export const ProductService = {
       product.groupProductId = groupProductId !== undefined ? groupProductId : product.groupProductId;
       product.imageUrl = imageUrl !== undefined ? imageUrl : product.imageUrl;
       await product.save();
-      return product;
+      return addCommentsNumber(product);
     } catch (error) {
       console.error('Error updating product:', error.message);
       throw new Error('Internal server error');
