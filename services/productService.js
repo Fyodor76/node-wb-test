@@ -10,9 +10,9 @@ const addCommentsNumber = async (product) => {
 };
 
 export const ProductService = {
-  createProduct: async ({ name, description, price, groupProductId, imageUrl }) => {
+  createProduct: async ({ name, description, price, groupProductId, imageUrl, rate }) => {
     try {
-      const product = await Product.create({ name, description, price, groupProductId, imageUrl });
+      const product = await Product.create({ name, description, price, groupProductId, imageUrl, rate });
       return product;
     } catch (error) {
       console.error('Error creating product:', error.message);

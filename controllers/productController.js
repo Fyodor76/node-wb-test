@@ -12,7 +12,7 @@ export const ProductController = {
       try {
         const { name, description, price, groupProductId } = req.body;
         const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-        const product = await ProductService.createProduct({ name, description, price, groupProductId, imageUrl });
+        const product = await ProductService.createProduct({ name, description, price, groupProductId, imageUrl, rate });
         res.status(201).json(product);
       } catch (error) {
         console.error('Error creating product:', error.message);
