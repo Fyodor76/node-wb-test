@@ -10,7 +10,7 @@ export const ProductController = {
     upload.single('image'),
     async (req, res) => {
       try {
-        const { name, description, price, groupProductId } = req.body;
+        const { name, description, price, groupProductId, rate } = req.body;
         const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
         const product = await ProductService.createProduct({ name, description, price, groupProductId, imageUrl, rate });
         res.status(201).json(product);
