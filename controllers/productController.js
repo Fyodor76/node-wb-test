@@ -34,10 +34,14 @@ export const ProductController = {
   searchProducts: async (req, res) => {
     try {
       const { query, group } = req.query;
+
+      if (!Object.keys(req.query)?.length) {
+        const products = await ProductService.getProducts();
+        res.status(200).json(products);
+      }
+      
       const whereClause = {};
 
-      console.log(query, 'query')
-      console.log(group, 'group')
       if (query) {
         whereClause.name = {
           [Op.iLike]: `%${query}%`

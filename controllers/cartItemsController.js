@@ -3,7 +3,8 @@ import { CartService } from "../services/cartItemsSerive.js";
 export const CartController = {
   addItem: async (req, res) => {
     try {
-      const { userId, productId, quantity, price } = req.body;
+      const userId = req.userId
+      const { productId, quantity, price } = req.body;
       console.log(req.body, 'req body');
       const item = await CartService.addItem({ userId, productId, quantity, price });
       res.status(201).json(item);
@@ -26,7 +27,7 @@ export const CartController = {
 
   getCart: async (req, res) => {
     try {
-      const { userId } = req.params;
+      const userId = req.userId
       const items = await CartService.getCart(userId);
       res.status(200).json(items);
     } catch (error) {
@@ -38,8 +39,9 @@ export const CartController = {
   updateItem: async (req, res) => {
     try {
       const { id } = req.params;
+      const userId = req.userId
       const { quantity } = req.body;
-      const item = await CartService.updateItem(id, quantity);
+      const item = await CartService.updateItem(id, userId, quantity);
       res.status(200).json(item);
     } catch (error) {
       console.error('Error updating item in cart:', error.message);

@@ -47,14 +47,11 @@ OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 Product.hasMany(OrderItem, { foreignKey: 'productId' });
 OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 
-// User -> CartItem
 User.hasMany(CartItem, { foreignKey: 'userId' });
 CartItem.belongsTo(User, { foreignKey: 'userId' });
 
-// Product -> CartItem
 Product.hasMany(CartItem, { foreignKey: 'productId' });
 CartItem.belongsTo(Product, { foreignKey: 'productId' });
-
 
 Product.hasMany(Comment, { foreignKey: 'productId' });
 Comment.belongsTo(Product, { foreignKey: 'productId' })
