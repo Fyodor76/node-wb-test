@@ -1,6 +1,7 @@
 import { CartItem } from '../models/cartItems.js';
 import { OrderItem } from '../models/orderItem.js';
 import { Order } from '../models/orders.js';
+import { Product } from "../models/product.js";
 
 export const OrderService = {
   createOrder: async ({ userId }) => {
@@ -20,7 +21,7 @@ export const OrderService = {
       const order = await Order.create({
         userId,
         totalAmount,
-        status: 'pending',
+        status: 'success',
       });
 
       // Создаем записи в OrderItems для каждого товара в корзине
@@ -39,6 +40,34 @@ export const OrderService = {
       return order;
     } catch (error) {
       console.error('Error creating order:', error.message);
+      throw new Error('Internal server error');
+    }
+  },
+
+  getCompletedOrders: async ({ userId }) => {
+    try {
+      const orders = await Order.findAll({
+        where: {
+          userId,
+        },
+        include: [
+          {
+            model: OrderItem,
+            as: 'OrderItems',
+            include: [
+              {
+                model: Product,
+                as: 'Product',
+                attributes: ['name', 'description', 'price', 'imageUrl'] 
+              }
+            ]
+          }
+        ]
+      });
+
+      return orders;
+    } catch (error) {
+      console.error('Error fetching completed orders:', error.message);
       throw new Error('Internal server error');
     }
   }

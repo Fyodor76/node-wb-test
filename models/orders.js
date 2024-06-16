@@ -20,7 +20,7 @@ Order.init({
   status: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'pending',
+    defaultValue: 'success',
   },
 }, {
   sequelize,
