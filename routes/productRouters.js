@@ -68,7 +68,7 @@ routerProduct.get('/', ProductController.getProducts);
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-routerProduct.get('/search', ProductController.searchProducts);
+routerProduct.get('/search', authenticate, ProductController.searchProducts);
 
 /**
  * @swagger
